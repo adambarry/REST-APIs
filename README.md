@@ -128,3 +128,28 @@ A discussion which I have experienced arises again and again, is on the topic of
 
 > #### Denial of service (DOS)
 > If using paging on collections, it's a good idea to prevent "denial of service" (DOS) settings from preventing users from traversing a collection via the built-in paging mechanism.
+
+### Creating new resources
+When creating a new resource, e.g.
+
+```
+POST https://path.to.api/v1/users
+
+{
+    name: "Firstname Surname"
+}
+```
+
+... including the resource in the `201 Created` response from the API makes, e.g.
+
+```
+{
+    id: 3,
+    name: "Firstname Surname",
+    href: "https://path.to.api/v1/users/3",
+    ..
+    .
+}
+```
+
+... makes the API so much easier to work with, as you don't (necessarily) have to refresh the collection, `users` in this case and subsequently request the specific resource, in order use the new resource.
