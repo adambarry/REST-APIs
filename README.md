@@ -1,7 +1,8 @@
-# How to make RESTful APIs flexible and sensible to work with
+How to make RESTful APIs flexible and sensible to work with
+============
 I have been an advocate for [RESTful](http://en.wikipedia.org/wiki/Representational_state_transfer) APIs since I first came across the concept in 2010, and although it took me a while to wrap my head around the concept, I knew from the first moment that this was something that made sense to me compared to the SOAP based APIs that I had previously been working with. Though initially starting out with RESTful APIs in their purest form (so to speak), I have discovered a couple tricks which make them a lot easier to work with, and in this post I’ll share these with you.
 
-## Fundamentals of RESTful APIs
+# Fundamentals of RESTful APIs
 First of all, let’s make sure that we have the same basic understanding of the concept of a RESTful API. It’s an API which uses:
 
 - A base URI, e.g. `https://path.to.api`.
@@ -13,7 +14,7 @@ First of all, let’s make sure that we have the same basic understanding of the
 
 The common denominator here is: Standards, i.e. a RESTful API is built using already existing standards, rather than having to invent public classes which are specific to a said project.
 
-### Response types
+## Response types
 With a RESTful API you have the following types of responses:
 
 1. <strong>Resource</strong>: A resource is an extensive object containing all information regarding the resource, e.g. `GET https://path.to.api/v1/users/1` should result in a response containing all available information about the user with `ID` 1.
@@ -53,10 +54,10 @@ GET https://path.to.api/v1/users/2
 
 … to get the information regarding each resource.
 
-## Improvements
+# Improvements
 As REST is a conceptual approach to building an API, each development team has to take it from here and build something which suits their needs. In the remainder of this post, I will be examining various approaches which I have found useful in the projects which I have worked on.
 
-### Basic versioning
+## Basic versioning
 As you may have noticed the examples above all contain `v1` as part of the request URL, i.e. an abbreviation for “version 1”. The reason behind including this is simply to avoid breaking functionality in the case that your team decides to build a new API from scratch, e.g.:
 
 - `GET https://path.to.api/v1/...`: Get a resource from the old API.
@@ -64,7 +65,7 @@ As you may have noticed the examples above all contain `v1` as part of the reque
 
 At some point you should probably get rid of the `v1` API for maintainability reasons, but by using versioning you can build the new version alongside the old without constantly having to stress over having to make sure that the consumers of the API, e.g. external users, are in sync with your progress.
 
-### Flexible collections (hyper-collections/hypercollections)
+## Flexible collections (hyper-collections/hypercollections)
 Instead of merely having collections being a list of resources, I suggest structuring the response into an object, which includes meta-data about the collection and where most of the meta-data properties can be given values as part of a request thus making the collection more flexible to work with, i.e. (numbered for convenience):
 
 1. <strong>Items</strong>: An array of resource objects.
@@ -98,7 +99,7 @@ GET https://path.to.api/v1/users?sort=name&reverse=true&limit=10&offset=50&detai
 }
 ```
 
-#### Examples
+### Examples
 Get all users sorted by name:
 `GET https://path.to.api/v1/users?sort=name`
 
@@ -117,19 +118,19 @@ Get users 25-49:
 Get the total number of users without any additional information for each resource:
 `GET https://path.to.api/v1/users?limit=0`
 
-## Other considerations
-### Case-sensitivity
+# Other considerations
+## Case-sensitivity
 After years of working with our own RESTful API as well as experiencing integration work with other RESTful APIs, I highly advocate making RESTful API URLs (and properties/values in request payloads) insensitive to casing. In my opinion (speaking from experience), case-sensitive URLs adds an unnecessary layer of complexity, which developers both in your own organization as well as developers from other organizations integrating with your RESTful API, will very likely clash with at some point. In my opinion, if you want others to integrate their software solutions with your own, you should aim for making this task as easy as possible for them, i.e. by removing any potential (unnecessary) obstacles.
 
 Having case-insensitive URLs also enables other (or “all” for that matter) developers to use their preferred type of casing, i.e. the one which makes the most sense to them, without it influencing the response they get from your RESTful API.
 
-### Paged collections
+## Paged collections
 A discussion which I have experienced arises again and again, is on the topic of how to handle large collections, specifically on whether to page them implicitly, or whether to serve the entire collection unless instructed otherwise. My stance on this is that implicitly paging a collection is an unnecessary obstacle and should be avoided. Of course you can encourage paging, but if I ask for a collection of resources, I expect to get the full collection, unless I have asked for a segment of it, i.e. via using the `limit` and `offset` properties presented above. However, everything is relative, and if serving an entire collection results in a very large network response, then paging by default probably makes sense.
 
-> #### Denial of service (DOS)
+> ### Denial of service (DOS)
 > If using paging on collections, it's a good idea to prevent "denial of service" (DOS) settings from preventing users from traversing a collection via the built-in paging mechanism.
 
-### Creating new resources
+## Creating new resources
 When creating a new resource, e.g.
 
 ```
@@ -156,5 +157,5 @@ POST https://path.to.api/v1/users
 
 The same principle applies to updating resources, i.e. `PUT` (and perhaps even `PATCH`), where including the result in the response from the API, removes the necessity of subsequently requesting the resource in order to get the updated version.
 
-### API first
+## API first
 On multiple occasions, I have experienced working with APIs which clearly were made as an afterthought, and every single time, the experience has been that the said API has been incomplete - either through errors or missing functionality which would have been noticed if the API had actually been used by the developers of the whole application. I.e. any operations supported by your application, should be available via the API. Hence, I advocate for developing the API first and then using it exclusively (and extensively) by whatever application you have consuming it, as this leads to a better API in my experience.
