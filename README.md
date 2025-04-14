@@ -153,3 +153,8 @@ POST https://path.to.api/v1/users
 ```
 
 ... makes the API so much easier to work with, as you don't (necessarily) have to refresh the collection, `users` in this case and subsequently request the specific resource, in order use the new resource.
+
+The same principle applies to updating resources, i.e. `PUT` (and perhaps even `PATCH`), where including the result in the response from the API, removes the necessity of subsequently requesting the resource in order to get the updated version.
+
+### API first
+On multiple occasions, I have experienced working with APIs which clearly were made as an afterthought, and every single time, the experience has been that the said API has been incomplete - either through errors or missing functionality which would have been noticed if the API had actually been used by the developers of the whole application. I.e. any operations supported by your application, should be available via the API. Hence, I advocate for developing the API first and then using it exclusively (and extensively) by whatever application you have consuming it, as this leads to a better API in my experience.
